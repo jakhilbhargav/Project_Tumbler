@@ -52,4 +52,4 @@ Mkfile.old
 dkms.conf
 
 # Exclude project dir
-.app_tumbler/_build/
+app_tumbler/_build/
