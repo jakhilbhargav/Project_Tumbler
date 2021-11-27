@@ -1,6 +1,9 @@
 # Prerequisites
 *.d
 
+# Common Makefiles
+*.posix
+
 # Object files
 *.o
 *.ko
@@ -50,3 +53,6 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Exclude project dir
+app_tumbler/_build/
