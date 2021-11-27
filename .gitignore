@@ -1,6 +1,9 @@
 # Prerequisites
 *.d
 
+# Common Makefiles
+*.posix
+
 # Object files
 *.o
 *.ko
