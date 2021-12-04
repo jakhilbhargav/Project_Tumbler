@@ -59,6 +59,9 @@
 #include "nrf_drv_clock.h"
 #include "sdk_errors.h"
 #include "app_error.h"
+#include "nrf_uart.h"
+#include "nrf_uarte.h"
+#include "app_uart.h"
 
 #if LEDS_NUMBER <= 2
 #error "Board is not equipped with enough amount of LEDs"
@@ -80,6 +83,7 @@ static void led_toggle_task_function (void * pvParameter)
     while (true)
     {
         bsp_board_led_invert(BSP_BOARD_LED_0);
+        printf("\r\n LED TOGGLE task function.\r\n");
 
         /* Delay a task for a given number of ticks */
         vTaskDelay(TASK_DELAY);
@@ -87,6 +91,20 @@ static void led_toggle_task_function (void * pvParameter)
         /* Tasks must be implemented to never return... */
     }
 }
+
+void uart_error_handle(app_uart_evt_t * p_event)
+{
+    if (p_event->evt_type == APP_UART_COMMUNICATION_ERROR)
+    {
+        APP_ERROR_HANDLER(p_event->data.error_communication);
+    }
+    else if (p_event->evt_type == APP_UART_FIFO_ERROR)
+    {
+        APP_ERROR_HANDLER(p_event->data.error_code);
+    }
+}
+
+
 
 /**@brief The function to call when the LED1 FreeRTOS timer expires.
  *
@@ -96,6 +114,7 @@ static void led_toggle_timer_callback (void * pvParameter)
 {
     UNUSED_PARAMETER(pvParameter);
     bsp_board_led_invert(BSP_BOARD_LED_1);
+    printf("\r\n LED TOGGLE TIMER CALLBACK.\r\n");
 }
 
 int main(void)
@@ -118,6 +137,24 @@ int main(void)
 
     /* Activate deep sleep mode */
     SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
+
+    const app_uart_comm_params_t comm_params =
+      {
+          RX_PIN_NUMBER,
+          TX_PIN_NUMBER,
+          RTS_PIN_NUMBER,
+          CTS_PIN_NUMBER,
+          APP_UART_FLOW_CONTROL_ENABLED,
+          false,
+          115200
+      };
+
+    APP_UART_FIFO_INIT(&comm_params,
+                        256,
+                        256,
+                        uart_error_handle,
+                        APP_IRQ_PRIORITY_LOWEST,
+                        err_code);
 
     /* Start FreeRTOS scheduler. */
     vTaskStartScheduler();
