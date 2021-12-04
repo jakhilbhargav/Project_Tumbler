@@ -59,6 +59,7 @@
 #include "nrf_drv_clock.h"
 #include "sdk_errors.h"
 #include "app_error.h"
+#include "errors.h"
 
 #if LEDS_NUMBER <= 2
 #error "Board is not equipped with enough amount of LEDs"
@@ -100,7 +101,7 @@ static void led_toggle_timer_callback (void * pvParameter)
 
 int main(void)
 {
-    ret_code_t err_code;
+    ret_code_t err_code = FAILURE;
 
     /* Initialize clock driver for better time accuracy in FREERTOS */
     err_code = nrf_drv_clock_init();
