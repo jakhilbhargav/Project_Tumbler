@@ -63,6 +63,10 @@
 #include "nrf_uarte.h"
 #include "app_uart.h"
 
+// UART config
+# define UART_RX_BUF_SIZE (256)
+# define UART_TX_BUF_SIZE (256)
+
 #if LEDS_NUMBER <= 2
 #error "Board is not equipped with enough amount of LEDs"
 #endif
@@ -83,6 +87,7 @@ static void led_toggle_task_function (void * pvParameter)
     while (true)
     {
         bsp_board_led_invert(BSP_BOARD_LED_0);
+        printf("\r\nled_toggle_task_function\n");
 
         /* Delay a task for a given number of ticks */
         vTaskDelay(TASK_DELAY);
@@ -113,6 +118,7 @@ static void led_toggle_timer_callback (void * pvParameter)
 {
     UNUSED_PARAMETER(pvParameter);
     bsp_board_led_invert(BSP_BOARD_LED_1);
+    printf("\r\nled_toggle_timer_callbackr\n");
 }
 
 int main(void)
@@ -138,8 +144,8 @@ int main(void)
     };
 
     APP_UART_FIFO_INIT(&comm_params,
-                        256,
-                        256,
+                        UART_RX_BUF_SIZE,
+                        UART_TX_BUF_SIZE,
                         uart_error_handle,
                         APP_IRQ_PRIORITY_LOWEST,
                         err_code);
