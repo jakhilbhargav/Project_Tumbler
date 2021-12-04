@@ -83,7 +83,6 @@ static void led_toggle_task_function (void * pvParameter)
     while (true)
     {
         bsp_board_led_invert(BSP_BOARD_LED_0);
-        printf("\r\n LED TOGGLE task function.\r\n");
 
         /* Delay a task for a given number of ticks */
         vTaskDelay(TASK_DELAY);
@@ -114,7 +113,6 @@ static void led_toggle_timer_callback (void * pvParameter)
 {
     UNUSED_PARAMETER(pvParameter);
     bsp_board_led_invert(BSP_BOARD_LED_1);
-    printf("\r\n LED TOGGLE TIMER CALLBACK.\r\n");
 }
 
 int main(void)
@@ -128,6 +126,28 @@ int main(void)
     /* Configure LED-pins as outputs */
     bsp_board_init(BSP_INIT_LEDS);
 
+    const app_uart_comm_params_t comm_params =
+    {
+        RX_PIN_NUMBER,
+        TX_PIN_NUMBER,
+        RTS_PIN_NUMBER,
+        CTS_PIN_NUMBER,
+        APP_UART_FLOW_CONTROL_ENABLED,
+        false,
+        NRF_UARTE_BAUDRATE_115200
+    };
+
+    APP_UART_FIFO_INIT(&comm_params,
+                        256,
+                        256,
+                        uart_error_handle,
+                        APP_IRQ_PRIORITY_LOWEST,
+                        err_code);
+
+    APP_ERROR_CHECK(err_code);
+
+    printf("\r\nInit complete.\r\n");
+
     /* Create task for LED0 blinking with priority set to 2 */
     UNUSED_VARIABLE(xTaskCreate(led_toggle_task_function, "LED0", configMINIMAL_STACK_SIZE + 200, NULL, 2, &led_toggle_task_handle));
 
@@ -137,24 +157,6 @@ int main(void)
 
     /* Activate deep sleep mode */
     SCB->SCR |= SCB_SCR_SLEEPDEEP_Msk;
-
-    const app_uart_comm_params_t comm_params =
-      {
-          RX_PIN_NUMBER,
-          TX_PIN_NUMBER,
-          RTS_PIN_NUMBER,
-          CTS_PIN_NUMBER,
-          APP_UART_FLOW_CONTROL_ENABLED,
-          false,
-          115200
-      };
-
-    APP_UART_FIFO_INIT(&comm_params,
-                        256,
-                        256,
-                        uart_error_handle,
-                        APP_IRQ_PRIORITY_LOWEST,
-                        err_code);
 
     /* Start FreeRTOS scheduler. */
     vTaskStartScheduler();
