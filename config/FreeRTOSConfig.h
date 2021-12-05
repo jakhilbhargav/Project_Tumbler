@@ -26,7 +26,6 @@
  * 1 tab == 4 spaces!
  */
 
-
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
 
@@ -63,7 +62,7 @@
 #define configTICK_RATE_HZ                                                        1024
 #define configMAX_PRIORITIES                                                      ( 3 )
 #define configMINIMAL_STACK_SIZE                                                  ( 60 )
-#define configTOTAL_HEAP_SIZE                                                     ( 4096 )
+#define configTOTAL_HEAP_SIZE                                                     ( 4096)
 #define configMAX_TASK_NAME_LEN                                                   ( 4 )
 #define configUSE_16_BIT_TICKS                                                    0
 #define configIDLE_SHOULD_YIELD                                                   1
@@ -74,7 +73,7 @@
 #define configQUEUE_REGISTRY_SIZE                                                 2
 #define configUSE_QUEUE_SETS                                                      0
 #define configUSE_TIME_SLICING                                                    0
-#define configUSE_NEWLIB_REENTRANT                                                1
+#define configUSE_NEWLIB_REENTRANT                                                0
 #define configENABLE_BACKWARD_COMPATIBILITY                                       1
 
 /* Hook function related definitions. */

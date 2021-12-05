@@ -12,7 +12,7 @@ $(OUTPUT_DIRECTORY)/nrf52840_xxaa.out: \
 SRC_FILES += \
   $(SDK_ROOT)/modules/nrfx/mdk/gcc_startup_nrf52840.S \
   $(SDK_ROOT)/components/boards/boards.c \
-  $(SDK_ROOT)/external/freertos/source/portable/MemMang/heap_useNewlib.c \
+  $(SDK_ROOT)/external/freertos/source/portable/MemMang/heap_1.c \
   $(SDK_ROOT)/external/freertos/source/list.c \
   $(SDK_ROOT)/external/freertos/portable/GCC/nrf52/port.c \
   $(SDK_ROOT)/external/freertos/portable/CMSIS/nrf52/port_cmsis.c \
@@ -28,12 +28,17 @@ SRC_FILES += \
   $(SDK_ROOT)/components/libraries/uart/retarget.c \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_clock.c \
   $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_uart.c \
+  $(SDK_ROOT)/integration/nrfx/legacy/nrf_drv_twi.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_clock.c \
   $(PROJ_DIR)/src/main.c \
+  $(PROJ_DIR)/src/init.c \
+  $(PROJ_DIR)/src/gyro.c \
+  $(PROJ_DIR)/src/control.c \
   $(SDK_ROOT)/modules/nrfx/mdk/system_nrf52840.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/prs/nrfx_prs.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_uart.c \
   $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_uarte.c \
+  $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_twi.c \
 
 # Include folders common to all targets
 INC_FOLDERS += \
@@ -41,10 +46,12 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components \
   $(SDK_ROOT)/modules/nrfx/mdk \
   $(PROJ_DIR) \
+  $(PROJ_DIR)/inc \
   $(SDK_ROOT)/components/libraries/timer \
   $(SDK_ROOT)/components/libraries/fifo \
   $(SDK_ROOT)/components/libraries/uart \
   $(SDK_ROOT)/components/libraries/strerror \
+  $(SDK_ROOT)/components/libraries/delay \
   $(SDK_ROOT)/components/toolchain/cmsis/include \
   $(SDK_ROOT)/external/freertos/source/include \
   $(SDK_ROOT)/external/freertos/config \
